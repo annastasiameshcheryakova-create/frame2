@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A-Frame сцена — Виправлений Тор</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+</head>
+<body style="margin: 0;">
+
+  <a-scene background="color: #8c8c8c">
+    <a-assets>
+      <img
+        id="floorTexture"
+        src="https://raw.githubusercontent.com/aframevr/sample-assets/master/assets/images/illustration/758px-Canestra_di_frutta_(Caravaggio).jpg"
+        crossorigin="anonymous"
+      >
+
+      <!-- ДОДАНО: власний MSDF-шрифт для українського напису -->
+      <!-- У репозиторії покладіть сюди згенеровані файли шрифту -->
+      <a-asset-item id="surnameFontJson" src="fonts/meshcheryakova-font.json"></a-asset-item>
+      <img id="surnameFontPng" src="fonts/meshcheryakova-font.png" crossorigin="anonymous">
+
+      <!-- ДОДАНО: довільна 3D-модель кота -->
+      <!-- Файли з архіву розмістіть, наприклад, у папці models/cat/ -->
+      <a-asset-item id="catObj" src="models/cat/12221_Cat_v1_l3.obj"></a-asset-item>
+      <a-asset-item id="catMtl" src="models/cat/12221_Cat_v1_l3.mtl"></a-asset-item>
+
+      <!-- ДОДАНО: текстури моделі кота -->
+      <img id="catDiffuse" src="models/cat/Cat_diffuse.jpg" crossorigin="anonymous">
+      <img id="catBump" src="models/cat/Cat_bump.jpg" crossorigin="anonymous">
+    </a-assets>
+
+    <a-sky color="#8c8c8c"></a-sky>
+
+    <a-light type="ambient" color="#bbbbbb" intensity="1"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.8" position="0 4 2" rotation="-45 0 0"></a-light>
+
+    <!-- ДОДАНО: ще одне м’яке підсвічування для моделі та напису -->
+    <a-light type="point" color="#fff4d6" intensity="0.9" position="2 4 -4"></a-light>
+    <a-light type="point" color="#d9ecff" intensity="0.45" position="-4 3 -6"></a-light>
+
+    <a-entity id="sceneGroup" position="0 0 0" rotation="0 0 0" scale="1 1 1">
+
+      <a-plane
+        src="#floorTexture"
+        width="7"
+        height="7"
+        rotation="-55 0 0"
+        position="-2 -2 -5"
+        color="purple">
+      </a-plane>
+
+      <a-plane
+        width="9"
+        height="2"
+        position="3 1 -9"
+        color="white">
+      </a-plane>
+
+      <a-text
+        value="Welcome to browser's VR!"
+        color="black"
+        width="10"
+        align="center"
+        position="3 1 -8.95">
+      </a-text>
+
+      <a-cylinder
+        color="yellow"
+        height="2"
+        radius="0.05"
+        position="-2 -1 -5">
+      </a-cylinder>
+
+      <a-cylinder
+        color="blue"
+        height="2"
+        radius="0.05"
+        position="-3 -1 -5">
+      </a-cylinder>
+
+      <a-torus
+        position="-2 1 -5"
+        color="green"
+        radius="1.2"
+        radius-tubular="0.2"
+        rotation="0 0 0"
+        animation="property: components.material.material.color; type: color; from: green; to: #3cff00; dir: alternate; loop: true; dur: 6000"
+        animation__spin="property: rotation; to: 0 0 360; loop: true; dur: 12000; easing: linear">
+      </a-torus>
+
+      <a-torus-knot
+        color="orange"
+        radius="1.2"
+        radius-tubular="0.3" 
+        p="2"
+        q="3"
+        position="-3.5 1 -5"
+        rotation="0 0 0"
+        animation="property: rotation; to: 0 360 360; loop: true; dur: 10000; easing: linear"
+        animation__color="property: components.material.material.color; type: color; from: orange; to: gold; dir: alternate; loop: true; dur: 5000">
+      </a-torus-knot>
+
+      <!-- ====================================================== -->
+      <!-- ДОДАНО НИЖЧЕ: елементи завдання без зміни наявного коду -->
+      <!-- ====================================================== -->
+
+      <!-- П’єдестал під модель -->
+      <a-cylinder
+        position="2.2 -1.1 -5.2"
+        radius="0.95"
+        height="0.35"
+        color="#d9d9d9"
+        roughness="0.75"
+        metalness="0.1">
+      </a-cylinder>
+
+      <!-- Декоративна підкладка з текстурою -->
+      <a-box
+        position="2.2 -0.86 -5.2"
+        width="1.7"
+        height="0.08"
+        depth="1.7"
+        src="#floorTexture"
+        color="#ffffff">
+      </a-box>
+
+      <!-- Довільна модель: кіт -->
+      <!-- Якщо MTL підтягне текстури автоматично, ок. Якщо ні — файли мають лежати поруч з .mtl -->
+      <a-entity
+        position="2.2 -0.78 -5.15"
+        rotation="0 -35 0"
+        scale="0.018 0.018 0.018"
+        obj-model="obj: #catObj; mtl: #catMtl"
+        animation__modelspin="property: rotation; to: 0 325 0; dir: alternate; loop: true; dur: 12000; easing: easeInOutSine">
+      </a-entity>
+
+      <!-- Задня панель для українського напису -->
+      <a-plane
+        position="2.2 2.45 -6.6"
+        width="4.8"
+        height="1.3"
+        color="#f7f7f7"
+        material="opacity: 0.93"
+        rotation="0 0 0">
+      </a-plane>
+
+      <!-- Український напис із власним прізвищем через згенерований MSDF-шрифт -->
+      <!-- Файли fonts/meshcheryakova-font.json та fonts/meshcheryakova-font.png
+           ви маєте самі згенерувати і покласти в репозиторій -->
+      <a-entity
+        position="0.45 2.32 -6.45"
+        rotation="0 0 0"
+        text="value: Мещерякова; font: fonts/meshcheryakova-font.json; fontImage: fonts/meshcheryakova-font.png; shader: msdf; color: #1b1b1b; align: center; width: 7.2; letterSpacing: 1.2; anchor: center; baseline: center;">
+      </a-entity>
+
+      <!-- Додатковий український підпис, щоб сцена виглядала завершено -->
+      <a-entity
+        position="2.2 1.78 -6.42"
+        text="value: A-Frame сцена з текстурою та 3D-моделлю; font: fonts/meshcheryakova-font.json; fontImage: fonts/meshcheryakova-font.png; shader: msdf; color: #4a4a4a; align: center; width: 6.8; letterSpacing: 0.6; anchor: center; baseline: center;">
+      </a-entity>
+
+      <!-- Декоративні стійки під інформаційну панель -->
+      <a-cylinder position="0.15 1.35 -6.58" radius="0.04" height="1.4" color="#555555"></a-cylinder>
+      <a-cylinder position="4.25 1.35 -6.58" radius="0.04" height="1.4" color="#555555"></a-cylinder>
+
+      <!-- Ще один текстурований елемент, щоб текстура читалась очевидніше -->
+      <a-box
+        position="4.25 -0.55 -5.6"
+        rotation="0 28 0"
+        width="1"
+        height="1"
+        depth="1"
+        src="#floorTexture"
+        color="#ffffff"
+        animation__float="property: position; to: 4.25 -0.35 -5.6; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine"
+        animation__rotate="property: rotation; to: 0 388 0; loop: true; dur: 14000; easing: linear">
+      </a-box>
+
+      <!-- Невелика платформа перед сценою -->
+      <a-plane
+        position="1.1 -1.45 -4.85"
+        rotation="-90 0 0"
+        width="7.2"
+        height="3.2"
+        color="#6c6c6c"
+        material="opacity: 0.35">
+      </a-plane>
+
+    </a-entity>
+
+    <a-camera position="0 1.6 0"></a-camera>
+  </a-scene>
+
+</body>
+</html>
