@@ -3,249 +3,114 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>A-Frame Проект: Мещерякова — Процедурна Сцена</title>
-  
+  <title>A-Frame сцена — Виправлений Тор</title>
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
-  
-  <script>
-    // =========================================================================
-    // ЧАСТИНА 1: КОМПОНЕНТ ДЛЯ КИРИЛИЦІ (МЕЩЕРЯКОВА)
-    // Стандартний a-text не підтримує українську. Ми створюємо компонент,
-    // який використовує растровий шрифт (Bitmap Font) з підтримкою кирилиці.
-    // Це набагато складніше, ніж просто текст, але це правильний шлях.
-    // =========================================================================
-    
-    AFRAME.registerComponent('ukrainian-text', {
-      schema: {
-        value: {type: 'string', default: 'Мещерякова'},
-        color: {type: 'color', default: 'black'},
-        width: {type: 'number', default: 5},
-        align: {type: 'string', default: 'center'}
-      },
-      
-      init: function () {
-        // Завантажуємо кастомний MSDF шрифт, який підтримує кирилицю
-        this.el.setAttribute('text', {
-          value: this.data.value,
-          font: 'https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json',
-          shader: 'msdf',
-          color: this.data.color,
-          width: this.data.width,
-          align: this.data.align
-        });
-      }
-    });
-
-    // =========================================================================
-    // ЧАСТИНА 2: ПРОЦЕДУРНА ГЕНЕРАЦІЯ ОТОЧЕННЯ
-    // Замість того, щоб вручну ставити кожен циліндр (як у вашому коді),
-    // ми створюємо систему, яка генерує "ліс" колон навколо центру.
-    // Це демонструє набагато вищий рівень роботи з A-Frame.
-    // =========================================================================
-    
-    AFRAME.registerComponent('procedural-forest', {
-      schema: {
-        count: {type: 'int', default: 30}, // Кількість колон
-        radius: {type: 'number', default: 10}, // Радіус розміщення
-        baseColor: {type: 'color', default: '#34495e'}
-      },
-      
-      init: function () {
-        const el = this.el;
-        const data = this.data;
-        const colors = ['#34495e', '#2c3e50', '#7f8c8d', '#95a5a6'];
-
-        for (let i = 0; i < data.count; i++) {
-          let column = document.createElement('a-cylinder');
-          
-          // Рандомні параметри для кожної колони
-          let angle = Math.random() * Math.PI * 2;
-          let dist = data.radius + (Math.random() - 0.5) * 2;
-          let x = Math.cos(angle) * dist;
-          let z = Math.sin(angle) * dist;
-          let height = 2 + Math.random() * 5;
-          let thick = 0.05 + Math.random() * 0.15;
-          let colorIndex = Math.floor(Math.random() * colors.length);
-
-          column.setAttribute('position', `${x} ${height / 2} ${z}`);
-          column.setAttribute('height', height);
-          column.setAttribute('radius', thick);
-          column.setAttribute('color', colors[colorIndex]);
-          column.setAttribute('metalness', '0.6');
-          column.setAttribute('roughness', '0.2');
-          
-          // Додаємо тіні (п. 3.10 посібника приділяє увагу освітленню)
-          column.setAttribute('shadow', 'receive: true; cast: true');
-
-          el.appendChild(column);
-        }
-        console.log(`Генерування завершено: ${data.count} колон створено.`);
-      }
-    });
-
-    // =========================================================================
-    // ЧАСТИНА 3: СИСТЕМА ЧАСТИНОК (PARTICLE SYSTEM) ВЛАСНОРУЧ
-    // Додаємо візуальний ефект "магічного пилу" навколо центральних фігур.
-    // Це складна логіка анімації.
-    // =========================================================================
-    
-    AFRAME.registerComponent('magic-dust', {
-      init: function () {
-        const el = this.el;
-        for (let i = 0; i < 50; i++) {
-          let p = document.createElement('a-sphere');
-          p.setAttribute('radius', '0.01');
-          p.setAttribute('color', '#f1c40f');
-          p.setAttribute('material', 'emissive: #f1c40f; emissiveIntensity: 2');
-          
-          // Рандомне початкове положення
-          let x = (Math.random() - 0.5) * 4;
-          let y = (Math.random() - 0.5) * 2 + 1;
-          let z = (Math.random() - 0.5) * 2;
-          p.setAttribute('position', `${x} ${y} ${z}`);
-
-          // Складна анімація руху вгору та зникнення
-          p.setAttribute('animation__float', {
-            property: 'position',
-            to: `${x} ${y + 2} ${z}`,
-            dur: 3000 + Math.random() * 2000,
-            easing: 'linear',
-            loop: true
-          });
-          p.setAttribute('animation__fade', {
-            property: 'components.material.material.opacity',
-            from: 1,
-            to: 0,
-            dur: 3000 + Math.random() * 2000,
-            easing: 'linear',
-            loop: true
-          });
-          
-          el.appendChild(p);
-        }
-      }
-    });
-
-  </script>
 </head>
-<body style="margin: 0; overflow: hidden;">
+<body style="margin: 0;">
 
-  <a-scene 
-    background="color: #050509" 
-    shadow="type: pcfsoft" 
-    fog="type: exponential; color: #050509; density: 0.06">
-    
+  <a-scene background="color: #8c8c8c">
     <a-assets>
-      <img id="floorTexture" src="https://raw.githubusercontent.com/aframevr/sample-assets/master/assets/images/illustration/758px-Canestra_di_frutta_(Caravaggio).jpg" crossorigin="anonymous">
-      
-      <a-asset-item id="cat-obj" src="12221_Cat_v1_l3.obj"></a-asset-item>
-      <a-asset-item id="cat-mtl" src="12221_Cat_v1_l3.mtl"></a-asset-item>
+      <img
+        id="floorTexture"
+        src="https://raw.githubusercontent.com/aframevr/sample-assets/master/assets/images/illustration/758px-Canestra_di_frutta_(Caravaggio).jpg"
+        crossorigin="anonymous"
+      >
+      <a-asset-item id="myFont" src="assets/fonts/19-font-msdf.json"></a-asset-item>
+      <img id="myFontImg" src="assets/fonts/19-font.png">
+
+      <a-asset-item id="cat-obj" src="assets/models/12221_Cat_v1_l3.obj"></a-asset-item>
+      <a-asset-item id="cat-mtl" src="assets/models/12221_Cat_v1_l3.mtl"></a-asset-item>
     </a-assets>
 
-    <a-light type="ambient" color="#223" intensity="0.4"></a-light>
-    
-    <a-light 
-      type="directional" 
-      color="#fff" 
-      intensity="0.8" 
-      position="-2 4 2" 
-      castShadow="true"
-      shadow-camera-left="-10"
-      shadow-camera-right="10"
-      shadow-camera-top="10"
-      shadow-camera-bottom="-10">
-    </a-light>
-    
-    <a-light type="point" color="#e74c3c" intensity="1" position="3 2 -2" animation="property: intensity; from: 1; to: 1.5; dir: alternate; loop: true; dur: 1000"></a-light>
+    <a-sky color="#8c8c8c"></a-sky>
 
-    <a-sky color="#050509"></a-sky>
+    <a-light type="ambient" color="#bbbbbb" intensity="1"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.8" position="0 4 2" rotation="-45 0 0"></a-light>
 
-    <a-plane 
-      src="#floorTexture" 
-      rotation="-90 0 0" 
-      width="50" 
-      height="50" 
-      repeat="10 10" 
-      material="roughness: 0.9; metalness: 0.1"
-      shadow="receive: true">
-    </a-plane>
+    <a-entity id="sceneGroup" position="0 0 0" rotation="0 0 0" scale="1 1 1">
 
-    <a-entity id="sceneGroup" position="0 0 -5">
+      <a-plane
+        src="#floorTexture"
+        width="7"
+        height="7"
+        rotation="-55 0 0"
+        position="-2 -2 -5"
+        color="purple">
+      </a-plane>
 
-      <a-box position="0 1.25 -0.5" width="4" height="2.5" depth="0.1" color="#1a1a2e" shadow="cast: true"></a-box>
+      <a-plane
+        width="9"
+        height="2"
+        position="3 1 -9"
+        color="white">
+      </a-plane>
 
-      <a-entity 
-        ukrainian-text="value: Студент:; color: #ecf0f1; width: 6" 
-        position="0 1.8 0">
-      </a-entity>
-      <a-entity 
-        ukrainian-text="value: Мещерякова; color: #f1c40f; width: 10" 
-        position="0 1.2 0"
-        animation="property: scale; from: 1 1 1; to: 1.05 1.05 1.05; dir: alternate; loop: true; dur: 2000">
-      </a-entity>
-      <a-entity 
-        ukrainian-text="value: Проєкт WebVR (п. 3.10); color: #95a5a6; width: 4" 
-        position="0 0.6 0">
-      </a-entity>
+      <a-text
+        value="Welcome to browser's VR!"
+        color="black"
+        width="10"
+        align="center"
+        position="3 1 -8.95">
+      </a-text>
 
-      <a-entity 
-        obj-model="obj: #cat-obj; mtl: #cat-mtl" 
-        scale="0.04 0.04 0.04" 
-        position="1.5 0 1.5" 
-        rotation="0 -30 0"
-        shadow="cast: true; receive: true"
-        animation="property: rotation; to: 0 330 0; loop: true; dur: 15000; easing: linear">
-      </a-entity>
-
-      <a-cylinder 
-        color="blue" 
-        height="1.5" 
-        radius="0.03" 
-        position="-1.5 0.75 1.5"
-        shadow="cast: true">
+      <a-cylinder
+        color="yellow"
+        height="2"
+        radius="0.05"
+        position="-2 -1 -5">
       </a-cylinder>
 
-      <a-torus 
-        position="-1.5 1.8 1.5" 
-        color="green" 
-        radius="0.7" 
-        radius-tubular="0.08"
-        shadow="cast: true"
-        animation="property: rotation; to: 360 0 360; loop: true; dur: 6000; easing: linear"
-        animation__color="property: material.color; from: green; to: #3cff00; dir: alternate; loop: true; dur: 3000">
+      <a-cylinder
+        color="blue"
+        height="2"
+        radius="0.05"
+        position="-3 -1 -5">
+      </a-cylinder>
+
+      <a-torus
+        position="-2 1 -5"
+        color="green"
+        radius="1.2"
+        radius-tubular="0.2"
+        rotation="0 0 0"
+        animation="property: components.material.material.color; type: color; from: green; to: #3cff00; dir: alternate; loop: true; dur: 6000"
+        animation__spin="property: rotation; to: 0 0 360; loop: true; dur: 12000; easing: linear">
       </a-torus>
 
-      <a-torus-knot 
-        color="orange" 
-        radius="0.6" 
-        radius-tubular="0.15" 
-        p="2" q="3"
-        position="-3 1 0" 
-        shadow="cast: true"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+      <a-torus-knot
+        color="orange"
+        radius="1.2"
+        radius-tubular="0.3" 
+        p="2"
+        q="3"
+        position="-3.5 1 -5"
+        rotation="0 0 0"
+        animation="property: rotation; to: 0 360 360; loop: true; dur: 10000; easing: linear"
+        animation__color="property: components.material.material.color; type: color; from: orange; to: gold; dir: alternate; loop: true; dur: 5000">
       </a-torus-knot>
-      
-      <a-cylinder 
-        color="yellow" 
-        height="1.5" 
-        radius="0.03" 
-        position="-3 0.75 -1.5"
-        shadow="cast: true">
-      </a-cylinder>
 
-      <a-entity magic-dust position="0 0 0"></a-entity>
+      <a-text
+        value="Мещерякова"
+        font="#myFont"
+        font-image="#myFontImg"
+        color="#222"
+        width="8"
+        align="center"
+        position="3 2.5 -9"
+        negate="false">
+      </a-text>
+
+      <a-obj-model 
+        src="#cat-obj" 
+        mtl="#cat-mtl" 
+        position="1.5 -2 -6" 
+        rotation="-90 0 0" 
+        scale="0.05 0.05 0.05">
+      </a-obj-model>
 
     </a-entity>
 
-    <a-entity procedural-forest="count: 70; radius: 12"></a-entity>
-
-    <a-entity id="rig" movement-controls="fly: false; speed: 0.3">
-      <a-camera position="0 1.6 0" look-controls>
-        <a-cursor color="#f1c40f" fuse="true" fuse-timeout="1500"></a-cursor>
-      </a-camera>
-    </a-entity>
-
+    <a-camera position="0 1.6 0"></a-camera>
   </a-scene>
 
 </body>
