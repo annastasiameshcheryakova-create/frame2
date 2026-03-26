@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A-Frame сцена — Виправлений Тор</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+</head>
+<body style="margin: 0;">
+
+  <a-scene background="color: #8c8c8c">
+    <a-assets>
+      <img
+        id="floorTexture"
+        src="Timoshka.sigma.jpg"
+        crossorigin="anonymous"
+      >
+    </a-assets>
+
+    <a-sky color="#8c8c8c"></a-sky>
+
+    <a-light type="ambient" color="#bbbbbb" intensity="1"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.8" position="0 4 2" rotation="-45 0 0"></a-light>
+
+<a-scene stats>
+<a-assets>
+<img id="canestra" src="https://raw.githubusercontent.com/
+aframevr/sample-assets/master/assets/images/illustration/
+758px-Canestra_di_frutta_(Caravaggio).jpg"
+crossorigin="anonymous">
+<img id="grid" src="https://raw.githubusercontent.com/
+aframevr/sample-assets/master/assets/images/uvgrid/
+UV_Grid_Sm.jpg" crossorigin="anonymous">
+<video id="city" src="https://cdn.aframe.io/
+360-video-boilerplate/video/city.mp4"
+crossorigin="anonymous"></video>
+<a-asset-item id="crate-obj"
+src="https://raw.githubusercontent.com/aframevr/assets/
+master/test-models/models/crate/crate.obj"></a-asset-item>
+<a-asset-item id="crate-mtl"
+src="https://raw.githubusercontent.com/aframevr/assets/
+master/test-models/models/crate/crate.mtl"></a-asset-item>
+<a-asset-item id="brainstem"
+src="https://raw.githubusercontent.com/aframevr/assets/
+master/test-models/models/glTF-2.0/brainstem/
+BrainStem.gltf"></a-asset-item>
+</a-assets>
+<a-sky color="grey"></a-sky>
+<a-torus position="-2 1 -5" color="green" radius="1.2"
+animation="property: components.material.material.color;
+type: color; from: green; to: white; loop: true; dur: 10000">
+</a-torus>
+<a-plane src="Timoshka.sigma.jpg" width="7" height="7" rotation="-55 0 0"
+position="-2 -2 -5" color="#d776d3"></a-plane>
+<a-cylinder color="yellow" height="2" radius="0.05" 
+position="-2 -1 -5"></a-cylinder>
+<a-cylinder color="blue" height="2" radius="0.05"
+position="-3 -1 -5"></a-cylinder>
+<a-torus-knot src="FENEK.PNG.webp" radius="1.2" position="-3 1 -5"
+animation="property: rotation; to: 0 0 360; loop: true;
+dur: 10000"></a-torus-knot>
+<a-plane src="okno.png" width="9" height="2" position="3 1 -9" color="#e5d1b8">
+</a-plane>
+<a-entity 
+      position="1 4 -5"     
+      animation="property:rotation; to: 540 360 720; loop:true; dur:10000">
+      <a-sphere radius="1.5" src="fenek.png"></a-sphere>
+      <a-cylinder color="yellow" height="4" radius="0.1"></a-cylinder>
+</a-entity>
+<p style="color: #291b16;"></p>
+<a-text value="Вітаю y браузерній VR!" color="#291b16"
+width="10" position="1 1 -8.9" font="19-font-msdf.json"
+negate="false"></a-text>
+      <a-text
+  value="Мещерякова"
+  color="black"
+  width="10"
+  font="19-font-msdf.json"
+  position="1 1.5 -9"
+  negate="false"
+  color="#291b16"
+  animation="property: position; 
+             to: 1 1.5 -8; 
+             dir: alternate; 
+             loop: true; 
+             dur: 2000">
+</a-text>
+<a-videosphere src="#city"></a-videosphere>
+<a-obj-model src="#crate-obj" mtl="#crate-mtl"
+position="2.5 -1 -5"></a-obj-model>
+<a-gltf-model src="little_cat.glb" position="2 0.02 -5" 
+ animation="property:rotation; to: 0 360 0; loop:true; dur:1125"></a-gltf-model>
+<a-light type="point" intensity="1.5" position="4 0 0"></a-light>
+</a-scene>
+
+    <a-camera position="1 0.2 0"></a-camera>
+  </a-scene>
+
+</body>
+</html>
